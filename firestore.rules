@@ -1,0 +1,27 @@
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Shared validation function
+    function isValidTransaction(tx) {
+      return tx.sender is string && 
+             tx.receiver is string && 
+             tx.amount is number && 
+             tx.timestamp is number;
+    }
+
+    // Transactions collection rules
+    match /transactions/{txId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && isValidTransaction(request.resource.data);
+      allow update, delete: if false; // Transactions should be immutable
+    }
+
+    // Suspicious accounts collection rules
+    // Only Cloud Functions or Admin should write here usually
+    match /suspicious_accounts/{accId} {
+      allow read: if request.auth != null;
+      allow write: if false; // Restricted to backend triggers
+    }
+  }
+}

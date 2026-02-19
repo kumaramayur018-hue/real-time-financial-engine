@@ -1,0 +1,5 @@
+{
+  "name": "Sentinel - Real-time Financial Crime Engine",
+  "description": "A production-ready financial monitoring dashboard using graph-based detection to identify money muling and suspicious transaction patterns in real-time.",
+  "requestFramePermissions": []
+}
